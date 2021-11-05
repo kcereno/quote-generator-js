@@ -3,11 +3,24 @@ const quoteText = document.getElementById("quote");
 const authorText = document.getElementById("author");
 const twitterBtn = document.getElementById("twitter");
 const newQuoteBtn = document.getElementById("new-quote");
+const loader = document.getElementById("loader");
 
 let apiQuotes = [];
 
+// Show Loading
+function showLoader() {
+  loader.hidden = false;
+  quoteContainer.hidden = true;
+}
+
+// Hide Loading
+function hideLoader() {
+  quoteContainer.hidden = false;
+  loader.hidden = true;
+}
 // Show NewQuote
 function newQuote() {
+    showLoader()
   const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
 
   if (quote.author === null) {
@@ -22,9 +35,12 @@ function newQuote() {
     quoteText.classList.remove("long-quote");
   }
   quoteText.textContent = quote.text;
+  hideLoader()
 }
 
+// Fetch Quotes from API
 async function getQuotes() {
+  showLoader();
   const apiUrl = "https://type.fit/api/quotes";
 
   try {
@@ -38,12 +54,12 @@ async function getQuotes() {
 
 function tweetQuote() {
   const twitterUrl = `https://twitter.com/intent/tweet?text=${quoteText.textContent} - ${authorText.textContent}`;
-  window.open(twitterUrl,'_blank')
+  window.open(twitterUrl, "_blank");
 }
 
 // Event Listeners
-newQuoteBtn.addEventListener('click',newQuote)
-twitterBtn.addEventListener('click',tweetQuote)
+newQuoteBtn.addEventListener("click", newQuote);
+twitterBtn.addEventListener("click", tweetQuote);
 
-// On Load
 getQuotes();
+
